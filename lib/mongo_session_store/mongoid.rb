@@ -3,7 +3,7 @@ require 'mongoid'
 module ActionDispatch
   module Session
     class MongoidStore < AbstractStore
-      
+
       class Session
         include Mongoid::Document
         include Mongoid::Timestamps
@@ -30,7 +30,7 @@ module ActionDispatch
           [sid, unpack(session.data)]
         end
 
-        def set_session(env, sid, session_data)
+        def set_session(env, sid, session_data, options = {})
           record = env[SESSION_RECORD_KEY] ||= find_session(sid)
           record.data = pack(session_data)
           # Rack spec dictates that set_session should return true or false
@@ -53,7 +53,7 @@ module ActionDispatch
           return nil unless packed
           Marshal.load(packed.unpack("m*").first)
         end
-      
+
     end
   end
 end
